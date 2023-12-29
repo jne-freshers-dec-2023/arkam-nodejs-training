@@ -45,12 +45,12 @@ const requestedFuntion = (req, res)=>
     res.end();
 }
 
-//module.exports = requestedFuntion;
+module.exports = requestedFuntion;
 
 // module.exports = 
 // {
 //     handler: requestedFuntion,
 // }
 
-exports.requestedFuntion;
-exports.name = 'Arkam';
+// exports.requestedFuntion;
+// exports.name = 'Arkam';
