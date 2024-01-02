@@ -1,11 +1,13 @@
 const express = require('express');
-// const bodyParaser = require('body-parser')
+const bodyParaser = require('body-parser')
 const app = express();
-// app.use(bodyParaser.urlencoded({extended: false}));
+
+app.use(bodyParaser.urlencoded({extended: false}));
 app.use(express.json())
-app.get('',(req,res)=>{
+
+app.get('/',(req,res)=>{
     const queryParams = req.query;
-    const params = req.params
+    
     return res.send("Hello "+queryParams.name)
     
 })
@@ -17,6 +19,13 @@ app.post('/add-post',(req,res)=>
     return res.json(data)
 })
 
+app.get('/:data',(req,res)=>
+{
+    const params = req.params
+
+    return res.json(params)
+})
+
 app.listen(5000, () => {
     console.log("App is running on 5000 PORT")
 })
@@ -25,20 +34,20 @@ app.listen(5000, () => {
 // Array Method (es5)
 
 
-const fun = async () => {
-    var b =20;
-    if(true) {
-        var a = 10;
-    }
-    console.log(a)
-    return b;
-}
-console.log(fun,"f")
-console.log("b", fun());
-fun().then((val)=>
-{
- console.log(val,"val")   
-})
+// const fun = async () => {
+//     var b =20;
+//     if(true) {
+//         var a = 10;
+//     }
+//     console.log(a)
+//     return b;
+// }
+// console.log(fun,"f")
+// console.log("b", fun());
+// fun().then((val)=>
+// {
+//  console.log(val,"val")   
+// })
 // console.log(b)
 
 // const newFun = new Promise(resolve, reject)
@@ -55,10 +64,10 @@ fun().then((val)=>
 
 // }
 
-const newPro = new Promise((resolve, reject) => {
-    resolve("Resolved ")
-})
+// const newPro = new Promise((resolve, reject) => {
+//     resolve("Resolved ")
+// })
 
-newPro.then((data) => {
-    console.log(data)
-})
+// newPro.then((data) => {
+//     console.log(data)
+// })
