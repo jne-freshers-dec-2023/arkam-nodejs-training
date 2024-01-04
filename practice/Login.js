@@ -11,7 +11,8 @@ app.use(loginRoutes)
 // })
 
 mongoose.connect("mongodb://localhost/test").then(
-    app.listen(8000,() =>{
-        console.log("server is listening on port :",8000);
-    })
+ 
 ).catch(err => console.log(err))
+app.listen(8000,() =>{
+    console.log("server is listening on port :",8000);
+})

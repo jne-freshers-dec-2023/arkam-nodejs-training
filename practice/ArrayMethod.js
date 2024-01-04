@@ -54,12 +54,12 @@ let priceOfFruits =
 
 
 //         //some
-// let moreThan100 = priceOfFruits.some((item)=>
-// {
-//     return item.value > 100;
-// })
+let moreThan100 = priceOfFruits.some((item)=>
+{
+    return item.value > 100;
+})
 
-// console.log(moreThan100)
+console.log(moreThan100)
 
 //         //every
 // let moreThan100 = priceOfFruits.every((item)=>
@@ -87,17 +87,17 @@ let arr = [ 10,20,30,40,50,60,70,80]
 
 // indexof
 
-// let value = arr.indexOf(50)
-// console.log(value)
+ var val = arr.indexOf(5066)
+console.log(val)
 
 
 //findIndex
 
-// let value = arr.findIndex((item)=>
-// {
-//     return item === 80
-// })
-// console.log(value)
+ val = arr.findIndex((item)=>
+{
+    return item === 80
+})
+console.log(val)
 
 
 // findIndex
