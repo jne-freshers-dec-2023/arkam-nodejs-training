@@ -95,3 +95,21 @@ module.exports.verify = (req,res) => {
         msg: 'User authenticated'
     })
 }
+
+module.exports.home= (req,res,next)=>
+{
+   // console.log("Cockie is:",req.get('Cookie'))
+    const loggedIn = req.get('Cookie')
+    console.log("Cookie is: ",loggedIn)
+ 
+    return res.json({msg:"Welcome"})
+}
+
+module.exports.cookies = (req,res,next)=>
+{
+    res.setHeader('set-Cookie','loggedIn=true; HttpOnly; Secure;',)
+    //req.isLoggedIn = true
+    // console.log(req.isLoggedIn);
+
+   res.redirect('/')
+}

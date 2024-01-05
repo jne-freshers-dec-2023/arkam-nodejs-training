@@ -11,7 +11,10 @@ router.put('/signup',authController.signup)
 
 router.post('/login',authController.login)
 
-// router.get('/login-cookie',authController)
+router.get('/',authController.home)
+
+router.get('/login-cookie',authController.cookies)
+
 router.get('/verify', middleware,authController.verify)
 
 

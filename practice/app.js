@@ -16,10 +16,10 @@ app.use((req,res, next)=>
     res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
 
     next()
-})
+}) 
 
 // app.use(feedRoute)
-app.use(authRoute)
+app.use(authRoute) 
 
 
 mongoose.connect("mongodb://localhost/test").then( (result)=>
