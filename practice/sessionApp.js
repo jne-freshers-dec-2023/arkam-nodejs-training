@@ -6,15 +6,24 @@ const mongoSession = require('connect-mongodb-session')(session);
 
 const sessionRoute = require('../Routes/session')
 
+const MONGO_URI = ('mongodb://localhost/test')
+
 const app = express();
 
-app.use(session({secret:'secretkey',resave: false, saveUninitialized: false}))
-
-const MONGO_URI = ('mongo://localhost/test')
-
 const sessionStore = new mongoSession({
-    uri:MONGO_URI
+    uri:MONGO_URI,
+    collection: 'session'
 })
+
+app.use(session(
+    {
+        secret:'secretkey',
+        resave: false, 
+        saveUninitialized: false,
+        store:sessionStore
+    
+    }))
+
 
 app.use(sessionRoute)
 

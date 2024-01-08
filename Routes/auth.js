@@ -1,4 +1,5 @@
 const express = require('express')
+import { check } from 'express-validator';
 
 const authController = require('../controller/auth')
 const { middleware } = require('../Middleware/auth')
@@ -7,7 +8,7 @@ const { middleware } = require('../Middleware/auth')
 
 const router = express.Router()
 
-router.put('/signup',authController.signup)
+router.put('/signup',check('email').isEmail(),authController.signup)
 
 router.post('/login',authController.login)
 
