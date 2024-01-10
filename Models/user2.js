@@ -2,7 +2,7 @@ const mongodb = require('mongoose')
 
 const schema = mongodb.Schema
 
-const newSchema = new schema = {
+const newSchema = new schema ({
     
         name:
         {
@@ -11,7 +11,8 @@ const newSchema = new schema = {
         email:
         {
             type: String,
-            required :true
+            required :true,
+            unque:true
         },
         password:
         {
@@ -20,6 +21,6 @@ const newSchema = new schema = {
 
         }
     
-}
+})
 
 module.exports = mongodb.model('User2',newSchema)

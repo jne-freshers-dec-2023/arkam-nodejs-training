@@ -1,4 +1,5 @@
 const express = require('express');
+const csrf = require('csurf')
 
 const session = require('express-session')
 
@@ -15,6 +16,8 @@ const sessionStore = new mongoSession({
     collection: 'session'
 })
 
+const csrfProtection = csrf()
+
 app.use(session(
     {
         secret:'secretkey',
@@ -24,7 +27,7 @@ app.use(session(
     
     }))
 
-
+app.use(csrfProtection)
 app.use(sessionRoute)
 
 app.listen(2200);

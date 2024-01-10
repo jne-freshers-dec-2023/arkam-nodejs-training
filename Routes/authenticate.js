@@ -1,11 +1,12 @@
 const express = require('express')
 
-import { check } from 'express-validator';
-
 const router = express.Router()
 
 const authenticateController = require('../controller/authenticate')
 
-router.post('/sigup',check('email').isEmail(),authenticateController.sigup)
+router.post('/signup',authenticateController.signup)
+router.post('/login',authenticateController.login)
+router.get('/',authenticateController.home)
+router.get('/postlogin',authenticateController.postLogin)
 
 module.exports = router
