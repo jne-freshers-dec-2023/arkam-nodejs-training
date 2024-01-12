@@ -27,11 +27,12 @@ app.use((error,req,res,next)=>
     console.log('inside error handling middleware' , error.message)
     return res.status(401).json({msg:error.message})
 })
+
 // Mongodb connection
 mongoose.connect("mongodb://localhost/testdb")
 .then
 {
-    app.listen(3030,()=>
+    app.listen(3040,()=>
     {
         console.log('Listning 3030');
     })

@@ -1,96 +1,132 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const user = require('../Models/user2')
-const { json } = require('body-parser');
+const { json } = require('body-parser')
 
-module.exports.signup = (req,res,next)=>
+const {check, validationResult} = require('express-validator')
+
+module.exports.signup = async(req,res,next)=>
 {
-    //throw new Error('Dummy') error handling middleware
+    try {
+
+    //throw new Error('Dummy') //error handling middleware
     const email = req.body.email
     const name = req.body.name
-    const pass = req.body.password
+    const password = req.body.password
+    const errors = validationResult(req)
 
-    user.findOne({email:email})
-
-    .then(newUser =>
+    if(!errors.isEmpty())
     {
-        if(!newUser.isEmpty)
+        const err = Error('validation failed')
+        err.statusCode = 422;
+        throw err;
+    }
+    const findUser = await user.findOne({email:email})
+
+    if(findUser)
         {
-            console.log('email already exists!')
            throw new Error('email already exists!')
         }
-    })
-   .catch((err)=>
-   {
-    err.statusCode(502);
-    return next(err)
-   })
- 
-    bcrypt.hash(pass,12)
-
-    .then((hashPass)=>
-    {
+   
+    const hashPass = await bcrypt.hash(password,12)
+    
     const user1 = new user
     ({
         email: email,
         name: name,
         password: hashPass
     })
-    user1.save()
+    const savedData = await user1.save()
 
-    if(!user1)
+    if(!savedData)
     {
-        console.log("unable to craete user")
-        return res.status(402).json({msg:'user not created'})
+        throw new Error('Unable to create user')
     }
-    })
 
-    .then((createdUser)=>
-    {
-        console.log('redirecting to /');
-        res.redirect('/')
-        // res.status(201).json({msg:'user created', userId:createdUser.userId})
-    })
-
-    .catch(err =>
-    {
-        if(!err.statusCode)
-        {
-            err.statusCode = 500;
-        }
-        next(err)
-    })
+   return res.redirect('/')
+}
+catch(err) 
+{
+    next(err)
+}
 }
 
-module.exports.login = (req,res,next)=>
+
+
+module.exports.login = async (req,res,next)=>
 {
+   try{
     const email = req.body.email
     const password = req.body.password
 
     // throw new Error('Dummy');
-    user.findOne({email:email})
-    .then(user=>
-    {
-        if(!user)
+   const foundUser = await user.findOne({email:email})
+  
+        if(!foundUser)
         {
             console.log('user not found!')
-            return res.statusCode(401).json({msg:'user not found!'})
+            const err = new Error('User not found')
+            err.statusCode = 400;
+            throw err
         }
-        bcrypt.compare(password,user.password)
+        const comparedPass = bcrypt.compare(password,foundUser.password)
+        if(!comparedPass)
         {
-            req.session.isLoggedIn = true
-            res.redirect('/postlogin')
+            const err = new Error('Password is wrong')
+            err.statusCode = 400;
+            throw err
         }
 
-        
-    })
-    .catch(err=>
-    {
-        // err.httpStatusCode = 500;
-        // return next(err)
-        console.log('findOne failed')
-        throw new Error(err)
-    })
+        const token = jwt.sign({
+            email: foundUser.email,
+            password: foundUser.password,
+            userId: foundUser.userId
+        },'arkam',{expiresIn :'1h'})
+
+        req.session.token = token
+        console.log(token)
+        req.session.isLoggedIn = true
+        res.redirect('/loginstaus')
+    }
+    catch(err)
+    {  
+       next(err)
+    }
+
+}
+
+module.exports.postLogin = async (req,res,next)=>
+{
+   try{
+    const email = req.body.email
+    const password = req.body.password
+
+    // throw new Error('Dummy');
+   const foundUser = await user.findOne({email:email})
+  
+        if(!foundUser)
+        {
+            console.log('user not found!')
+            const err = new Error('User not found')
+            err.statusCode = 400;
+            throw err
+        }
+        const comparedPass = bcrypt.compare(password,foundUser.password)
+        if(!comparedPass)
+        {
+            const err = new Error('Password is wrong')
+            err.statusCode = 400;
+            throw err
+        }
+
+    
+        req.session.isLoggedIn = true
+        res.redirect('/loginstatus')
+    }
+    catch(err)
+    {  
+       next(err)
+    }
 
 }
 
@@ -99,7 +135,7 @@ module.exports.home = (req,res,next)=>
     res.status(201).json({msg:'user created successfully!'})
 }
 
-module.exports.postLogin = (req,res,next)=>
+module.exports.loginStatus = (req,res,next)=>
 {
     const session = req.session.isLoggedIn
     if(!session)
@@ -107,5 +143,6 @@ module.exports.postLogin = (req,res,next)=>
         res.status(401).json({msg:'user is not logged in'})
     }
 
-    res.status(201).json({msg:'user logged in successfully!'})
+    res.status(201).json({msg:`user logged in successfully! with 
+    token: ${req.session.token}`})
 }
