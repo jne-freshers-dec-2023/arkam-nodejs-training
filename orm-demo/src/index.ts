@@ -1,21 +1,20 @@
 import { AppDataSource } from "./data-source"
-import { Client } from "./entity/Client"
-import { Employee } from "./entity/Employee"
-import { User } from "./entity/User"
+import express from 'express'
+import app3Route from '../src/JSFile/app3Route'
+import bodyParser  from 'body-parser'
 
 AppDataSource.initialize().then(async () => {
-
-    const employee = new Employee()
-    employee.firstName = "Jason"
-    employee.lastName = "Jack"
-    employee.salary = 66000
-
-    await AppDataSource.manager.save(employee)
-    console.log("Saved a new employee with id: " + employee.id)
-
-    const emp = await AppDataSource.manager.find(Employee)
-    console.log('Loaded Employee:',emp)
- 
-     
+    
+    const app = express()
+    
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json())
+    
+    app.use(app3Route)
+    
+    app.listen(4040,()=>
+    {
+        console.log("Listing to 4040 Port")
+    })     
 
 }).catch(error => console.log(error))
