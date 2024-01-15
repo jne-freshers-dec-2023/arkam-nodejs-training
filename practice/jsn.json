@@ -1,0 +1,7 @@
+
+{
+ "name" : "roy",
+ "age" : 22,
+ "key3": true,
+ "key4":{ "nestedkey" : "nested" }
+}
